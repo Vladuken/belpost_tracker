@@ -2,19 +2,14 @@ name: detekt
 
 on:
   pull_request:
-    branches:
-      - develop
-      - main
-
+    branches: [ develop, main ]
 jobs:
-  detekt:
+  unit-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
-      - name: "install detekt"
-        uses: natiginfo/action-detekt-all@1.18.1
-
-      - name: "detekt"
-        run: ./gradlew detekt
+      - name: run detekt
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: detekt
