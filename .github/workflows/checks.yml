@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [ develop, main ]
 jobs:
+  #Run detekt
+  #TODO Add ability to upload HTML-report
   detekt:
     runs-on: ubuntu-latest
     steps:
@@ -13,6 +15,7 @@ jobs:
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: detekt
+  #Run tests and upload test reports
   unit-tests:
     runs-on: ubuntu-latest
     steps:
@@ -21,9 +24,23 @@ jobs:
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: test
-
       - uses: actions/upload-artifact@v2
         name: Upload tests results
         with:
-          name: unit-tests-retorts
+          name: unit-tests-reports
           path: app/build/test-results/
+
+  #TODO Add Ability to create apk only on pull request to 'main'
+  buildApk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build APK after checks
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
