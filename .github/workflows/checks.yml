@@ -17,9 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-
-
       - name: Run unit-tests
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: test
+
+      - uses: actions/upload-artifact@v2
+        name: Upload tests results
+        with:
+          name: unit-tests-retorts
+          path: app/build/test-results/
